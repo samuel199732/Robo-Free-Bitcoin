@@ -1,0 +1,16 @@
+*.log
+*.idea
+*.pdf
+*.log
+*.pyc
+*.pyo
+*.png
+*.jpeg
+*.exe
+selenium*
+*driver*
+env
+venv
+.DS_Store
+config
+__pycache__/*

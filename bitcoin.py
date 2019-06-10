@@ -17,7 +17,7 @@ def login():
         background = driver.find_element_by_css_selector('body > div.reveal-modal-bg')
         background.click()
     except Exception as e:
-        pass
+        pprint('without modal')
 
     botao = driver.find_element_by_css_selector(
         'body > div.large-12.fixed > div > nav > section > ul > li.login_menu_button > a')
@@ -25,6 +25,18 @@ def login():
     driver.find_element_by_id('login_form_btc_address').send_keys(config.email)
     driver.find_element_by_id('login_form_password').send_keys(config.senha)
     driver.find_element_by_id('login_button').click()
+    try:
+        wait.until(EC.url_to_be('https://freebitco.in/?op=home'))
+    except Exception as e:
+        pass
+
+
+def islogin():
+    try:
+        login = driver.get_cookie('password')
+        return True if not (login is None) else False
+    except Exception as e:
+        return False
 
 
 def rollnumber():
@@ -40,6 +52,8 @@ def rollnumber():
         if driver.find_element_by_css_selector('div#play_without_captchas_button.play_without_captcha_button.center'):
             driver.execute_script('document.querySelector("#play_without_captchas_button").click()')
             driver.execute_script('document.querySelector("#free_play_form_button").click()')
+            num = driver.execute_script('return document.querySelector("#free_play_digits").textContent')
+            pprint('Number drawn ' + str(num).replace(' ', ""))
             driver.refresh()
     except Exception as e:
         pprint("I can't play yet")
@@ -47,9 +61,11 @@ def rollnumber():
 
 
 def main():
-    login()
     while True:
-        rollnumber()
+        if not islogin():
+            login()
+        else:
+            rollnumber()
 
 
 main()
